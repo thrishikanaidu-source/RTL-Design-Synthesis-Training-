@@ -1,0 +1,92 @@
+# Day 2 - Timing Libraries, Synthesis and Flip-Flop RTL Coding
+
+## Objective
+
+The objective of Day 2 is to understand timing libraries used in ASIC design, synthesis approaches, RTL coding styles for flip-flops, simulation using Icarus Verilog, and synthesis using Yosys.
+
+## 1. Timing Libraries
+
+### 1.1 SKY130 PDK
+
+SKY130 is an open-source Process Design Kit for 130 nm CMOS technology.
+
+The PDK provides technology information and standard-cell libraries required during the ASIC design flow.
+
+The timing library used in this exercise is:
+
+`sky130_fd_sc_hd__tt_025C_1v80.lib`
+
+## 1.2 Library Operating Conditions
+
+- **tt** - Typical process
+- **025C** - Temperature of 25°C
+- **1v80** - Supply voltage of 1.8 V
+
+## 1.3 Viewing the Liberty File
+
+The `.lib` file contains timing and power information for standard cells.
+
+Example command:
+
+    gedit sky130_fd_sc_hd__tt_025C_1v80.lib
+
+## 2. Hierarchical and Flattened Synthesis
+
+### Hierarchical Synthesis
+
+Hierarchical synthesis preserves the module structure of the RTL design.
+
+**Advantages:**
+- Easier debugging
+- Maintains module boundaries
+- Suitable for large designs
+
+### Flattened Synthesis
+
+Flattened synthesis removes the module hierarchy and creates a single-level design.
+
+**Advantages:**
+- Allows optimization across modules
+- Produces a unified netlist
+
+## 3. Flip-Flop Coding Styles
+
+### Asynchronous Reset D Flip-Flop
+
+The asynchronous reset can reset the flip-flop immediately without waiting for the clock edge.
+
+### Asynchronous Set D Flip-Flop
+
+The asynchronous set can set the output immediately when the set signal is activated.
+
+### Synchronous Reset D Flip-Flop
+
+The synchronous reset takes effect only at the active clock edge.
+
+## 4. Simulation
+
+Icarus Verilog can be used to compile and simulate the RTL design.
+
+Example:
+
+    iverilog dff_asyncres.v tb_dff_asyncres.v
+
+    ./a.out
+
+GTKWave can be used to view the generated waveform.
+
+    gtkwave tb_dff_asyncres.vcd
+
+## 5. Synthesis Using Yosys
+
+Yosys is used to synthesize the RTL design and generate a gate-level representation.
+
+Typical synthesis commands include:
+
+    read_verilog dff_asyncres.v
+    synth -top dff_asyncres
+    show
+
+## Conclusion
+
+Day 2 provided an understanding of timing libraries, SKY130 PDK operating conditions, synthesis approaches, flip-flop RTL coding styles, simulation using Icarus Verilog, and synthesis using Yosys.
