@@ -1,11 +1,16 @@
 Welcome to my RTL Design&Synthesis Training respository.
 
-This respository documents my daily learning, verilog programs,simulation results,and synthesis using open-source EDA tools
+This respository documents my daily learning, hands on experience on verilog programs,simulation results,and synthesis using open-source EDA tools
 📖 Training Progress
 
-| Day | Topic | Status |
-|------|---------------------------------------------|------------|
-| Day 1 | Introduction to Verilog RTL Design & Simulation | ✅ Completed |
+| Session | Topic | Status |
+|--------|-------|--------|
+| Day 1 | Verilog RTL Design & Functional Simulation | ✅ Completed |
+| Day 2 | Timing Libraries, Synthesis & Flip-Flop Coding | ✅ Completed |
+| Day 3 | Combinational & Sequential Optimization | ✅ completed |
+| Day 4 | Gate-Level Simulation & Blocking vs Non-Blocking | ✅ completed |
+| Day 5 | Synthesis Optimization Techniques | ⏳ Upcoming |
+
 ---
 
 🛠️ Tools 
@@ -15,13 +20,4 @@ This respository documents my daily learning, verilog programs,simulation result
 - GTKWave
 
   ---
-
- 📚 Day 1 – Introduction to Verilog RTL Design & Simulation
-
-Topics Covered
-- Basics of Verilog HDL
-- Design and Testbench
-- RTL Simulation using Icarus Verilog
-- Waveform Analysis using GTKWave
-- 2:1 Multiplexer (MUX) Design and Simulation
 
