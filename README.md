@@ -9,7 +9,7 @@ This respository documents my daily learning, hands on experience on verilog pro
 | Day 2 | Timing Libraries, Synthesis & Flip-Flop Coding | ✅ Completed |
 | Day 3 | Combinational & Sequential Optimization | ✅ completed |
 | Day 4 | Gate-Level Simulation & Blocking vs Non-Blocking | ✅ completed |
-| Day 5 | Synthesis Optimization Techniques | ⏳ Upcoming |
+| Day 5 | Synthesis Optimization Techniques | ✅ completed |
 
 ---
 
@@ -18,6 +18,7 @@ This respository documents my daily learning, hands on experience on verilog pro
 - Verilog HDL
 - Icarus Verilog
 - GTKWave
+- yosys
 
   ---
 
