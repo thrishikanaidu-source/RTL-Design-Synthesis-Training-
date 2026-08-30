@@ -1,37 +1,23 @@
-# RVMyth — Functional Simulation, Synthesis and Gate-Level Simulation
+# RVMyth — Simulation, Synthesis and GLS
 
 ## Objective
 
-To verify the functionality of the RVMyth RISC-V core by performing functional simulation, synthesis, Gate-Level Simulation (GLS), and comparison of pre-synthesis and post-synthesis results.
-
-### Flow
-
-```text
-RVMyth RTL
-    ↓
-Functional Simulation
-    ↓
-Synthesis
-    ↓
-Synthesized Netlist
-    ↓
-Gate-Level Simulation (GLS)
-    ↓
-Pre-Synthesis vs Post-Synthesis Comparison
-```
+To perform functional simulation of the RVMyth core, synthesize the RTL design, generate the synthesized netlist, perform Gate-Level Simulation (GLS), and compare the pre-synthesis and post-synthesis results.
 
 ---
 
+
+
 ## 1. Functional Simulation
 
-The RVMyth RTL design was first simulated using the testbench.
+The BabySoC RTL design was first simulated using the testbench.
 
 The functional simulation was performed to verify the behavior of the RTL design before synthesis.
 
-### Simulation
+### Simulation Flow
 
 ```text
-RVMyth RTL
+RTL Design
     ↓
 Testbench
     ↓
@@ -42,63 +28,76 @@ GTKWave
 
 ### Functional Simulation Waveform
 
-<img width="1599" height="899" alt="image" src="https://github.com/user-attachments/assets/40a39e86-319e-4a88-af9b-0cb8b18cf975" />
+<img width="1600" height="598" alt="image" src="https://github.com/user-attachments/assets/34f89ae8-f024-49c1-9b48-ab000ac77363" />
 
-The waveform was observed in GTKWave and the expected signals were verified.
+The waveform was observed using GTKWave to verify the functional behavior of the design.
 
 ---
 
 ## 2. Synthesis
 
-After successful functional simulation, the RVMyth RTL design was synthesized using Yosys.
+<img width="1600" height="402" alt="image" src="https://github.com/user-attachments/assets/a266718d-4e91-4299-9aae-00564b782ebd" />
 
-Synthesis converts the RTL design into a gate-level netlist.
+
+<img width="1567" height="817" alt="image" src="https://github.com/user-attachments/assets/be5a2ffd-45ea-4187-ab98-d1e2c86d2258" />
+
+
+After functional simulation, the BabySoC RTL design was synthesized using Yosys.
+
+The required RTL files and library files were read first, followed by synthesis of the top module.
+
+### Yosys Commands
+
+```yosys
+yosys
+
+read_verilog src/module/vsdbabysoc.v
+
+read_verilog -I src/include src/module/rvmyth.v
+
+read_verilog -I src/include src/module/clk_gate.v
+
+read_liberty -lib src/lib/avsdpll.lib
+
+read_liberty -lib src/lib/avsddac.lib
+
+read_liberty -lib src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+synth -top vsdbabysocabc -liberty src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+flatten
+
+setundef -zero
+
+clean -purge
+
+rename -enumerate
+```
 
 ### Synthesis Flow
 
 ```text
-RVMyth RTL
-    ↓
-Yosys
-    ↓
+vsdbabysoc.v
+     ↓
+rvmyth.v
+     ↓
+clk_gate.v
+     ↓
+Library Files
+     ↓
+Yosys Synthesis
+     ↓
 Synthesized Netlist
 ```
 
-The synthesized netlist generated from this step was used for Gate-Level Simulation.
-
-### Synthesized Schematic
-
-<img width="1600" height="402" alt="image" src="https://github.com/user-attachments/assets/f7887ac8-216c-4e3c-a9df-34bbdee79a08" />
-
-
-----
-
-
-<img width="1567" height="817" alt="image" src="https://github.com/user-attachments/assets/bc2ecedc-f7e1-4c29-875e-8c89d0663926" />
-
 ---
 
-## 3. Synthesized Netlist
 
-The output of the synthesis process is a gate-level netlist of the RVMyth design.
+##  Gate-Level Simulation (GLS)
 
-```text
-RTL Design
-    ↓
-Synthesis
-    ↓
-Gate-Level Netlist
-```
+The synthesized netlist generated during synthesis was used for Gate-Level Simulation.
 
-This synthesized netlist was used as the design under test for the GLS.
-
----
-
-## 4. Gate-Level Simulation (GLS)
-
-The synthesized netlist was simulated using the same testbench.
-
-Gate-Level Simulation was performed to verify the behavior of the synthesized design.
+The same testbench was used to simulate the synthesized design.
 
 ### GLS Flow
 
@@ -114,77 +113,73 @@ Synthesized Netlist
 
 ### GLS Waveform
 
-<img width="1185" height="570" alt="image" src="https://github.com/user-attachments/assets/58e334d2-2327-4bf4-b990-bdfe12ca0bcd" />
+<img width="1307" height="640" alt="image" src="https://github.com/user-attachments/assets/a4467dcb-0f36-425d-95b7-c356ad372b3a" />
 
 The GLS waveform was observed using GTKWave.
 
 ---
 
-## 5. Pre-Synthesis vs Post-Synthesis Comparison
+##  Pre-Synthesis vs Post-Synthesis Comparison
 
-<img width="1311" height="650" alt="image" src="https://github.com/user-attachments/assets/8a819883-589a-45ca-a468-d74c020e526a" />
+<img width="1600" height="819" alt="image" src="https://github.com/user-attachments/assets/42484470-046d-4994-a682-75b3d84bcb93" />
 
 
-
-The functional simulation waveform was compared with the post-synthesis GLS waveform.
+The pre-synthesis functional simulation and post-synthesis GLS waveforms were compared.
 
 | Parameter | Pre-Synthesis | Post-Synthesis / GLS |
 |-----------|---------------|----------------------|
-| Design | RVMyth RTL | Synthesized Netlist |
+| Design | RTL | Synthesized Netlist |
 | Simulation | Functional Simulation | Gate-Level Simulation |
-| Testbench | RVMyth Testbench | Same Testbench |
-| Functionality | Expected RTL behavior | Same functional behavior |
+| Testbench | Same Testbench | Same Testbench |
+| Functionality | Expected behavior | Same functional behavior |
 
 ### Observation
 
-The post-synthesis GLS waveform shows the same functional behavior as the pre-synthesis RTL simulation.
+The post-synthesis GLS waveform follows the expected functional behavior of the pre-synthesis simulation.
 
-Small timing differences may occur because the GLS is performed using the synthesized gate-level netlist.
-
-Therefore, the synthesized RVMyth design was successfully verified against the original RTL design.
+Small timing differences may occur in GLS because the synthesized design contains gate and cell propagation delays.
 
 ---
 
-## 6. Results
+## Results
 
-- RVMyth functional simulation was performed successfully.
-- The RVMyth RTL design was synthesized using Yosys.
+- Functional simulation was completed successfully.
+- The RTL design was synthesized using Yosys.
 - A synthesized gate-level netlist was generated.
-- Gate-Level Simulation was performed using the synthesized netlist.
+- The synthesized netlist was used for Gate-Level Simulation.
 - The GLS waveform was observed using GTKWave.
 - Pre-synthesis and post-synthesis waveforms were compared.
 - The synthesized design maintains the expected functionality of the RTL design.
 
 ---
 
-
-
-## 9. Complete RTL-to-GLS Flow
+##  Complete RTL-to-GLS Flow
 
 ```text
-              RVMyth RTL
-                  ↓
-        Functional Simulation
-                  ↓
-               GTKWave
-                  ↓
-              Synthesis
-                  ↓
-        Synthesized Netlist
-                  ↓
-        Gate-Level Simulation
-                  ↓
-               GTKWave
-                  ↓
-      Pre vs Post Comparison
+                  RTL Design
+                      ↓
+             Functional Simulation
+                      ↓
+                   GTKWave
+                      ↓
+                Yosys Synthesis
+                      ↓
+             Synthesized Netlist
+                      ↓
+             Gate-Level Simulation
+                      ↓
+                   GTKWave
+                      ↓
+       Pre-Synthesis vs Post-Synthesis
+                  Comparison
 ```
 
 ---
 
 ## Conclusion
 
-The RVMyth design was successfully taken through the complete RTL-to-GLS flow.
+The BabySoC design was successfully taken through the complete RTL-to-GLS flow.
 
-Functional simulation was performed first to verify the RTL design. The design was then synthesized using Yosys to generate the gate-level netlist. The synthesized netlist was used for Gate-Level Simulation, and the resulting waveform was compared with the pre-synthesis functional simulation.
+The design was first functionally simulated and verified. It was then synthesized using Yosys with the Sky130 standard-cell library. The synthesized netlist was used for Gate-Level Simulation, and the GLS waveform was compared with the pre-synthesis functional simulation.
 
-The comparison confirmed that the synthesized RVMyth design preserves the intended functionality of the RTL design.
+The comparison confirms that the synthesized design maintains the intended functionality of the RTL design.
