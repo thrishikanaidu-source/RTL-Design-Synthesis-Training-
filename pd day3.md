@@ -1,8 +1,8 @@
-# Day 8: Device-Level Characterization — SPICE Modeling of a CMOS Inverter and the 16-Mask Fab Flow
+# pd day 3: Device-Level Characterization — SPICE Modeling of a CMOS Inverter and the 16-Mask Fab Flow
 
 ## Overview
 
-Day 8 is the entry point into Module 3 of the Sky130 VSD program. Having spent Day 7 on floorplanning and placement at the digital level, the focus now drops all the way down to individual transistors and how they're actually manufactured. The day splits into two theory tracks plus a connected lab sequence:
+day3  is the entry point into Module 3 of the Sky130 VSD program. Having spent Day 7 on floorplanning and placement at the digital level, the focus now drops all the way down to individual transistors and how they're actually manufactured. The day splits into two theory tracks plus a connected lab sequence:
 
 - **Track 1** builds up SPICE-based characterization of a CMOS inverter from first principles — how a SPICE deck is put together, and how it's used to pull out both the inverter's **static** behavior (the switching threshold, V_M) and its **dynamic** behavior (rise and fall delay).
 - **Track 2** walks the **16-mask CMOS fabrication sequence** end to end, tracing how a blank silicon wafer becomes a functioning CMOS inverter one masking step at a time.
@@ -143,19 +143,21 @@ What comes out the other end — the full stack from substrate to top metal — 
 
 Re-ran the floorplan stage with a different IO placer mode to compare pin placement outcomes.
 
-<img width="1920" height="983" alt="io placer equi distance" src="https://github.com/user-attachments/assets/4a7ae227-5ad5-4bae-8821-903fcf729087" />
-<img width="1920" height="983" alt="zoomed io placer equi distance" src="https://github.com/user-attachments/assets/2830dee4-8a77-4da5-bdb0-2d0dc4596937" />
-<img width="1920" height="983" alt="io placer after mode set to 2" src="https://github.com/user-attachments/assets/9695ad32-b6e5-4119-9c88-1dd5ca9215f8" />
-<img width="1920" height="983" alt="zoomed io placer after mode set to 2" src="https://github.com/user-attachments/assets/405ed811-699e-4f9f-bb3a-9daa36eea458" />
+<img width="1095" height="540" alt="image" src="https://github.com/user-attachments/assets/36891842-375d-46bd-b60f-e56ebf65ba67" />
+<img width="1096" height="542" alt="image" src="https://github.com/user-attachments/assets/bfffba6d-511f-46ae-82ca-38c54cf50aa3" />
+<img width="1096" height="541" alt="image" src="https://github.com/user-attachments/assets/774ab9ff-771b-4f25-9a78-067f286eeb6d" />
+
+
 
 In its default (equidistant) mode, the IO placer spaces pins evenly along each edge of the die. Switching the mode parameter to `2` swaps in a different distribution strategy — the resulting pin clustering along the boundary looks noticeably different from the uniform baseline.
 
 ### Lab 2 — Getting Magic Set Up with the Sky130 Standard-Cell Repo
 
-<img width="1920" height="983" alt="git clonned vsdstdcelldesign" src="https://github.com/user-attachments/assets/db652168-1e2e-464b-a044-94ae4585dcf8" />
-<img width="1920" height="983" alt="copied sky130A tech to the directory clonned" src="https://github.com/user-attachments/assets/ca24c556-4172-4685-b192-f6d37c6c6c66" />
-<img width="1920" height="983" alt="magic cmd" src="https://github.com/user-attachments/assets/673c71f0-e71d-4e68-a58f-b3e796b77f13" />
-<img width="1920" height="983" alt="inverter layout" src="https://github.com/user-attachments/assets/ce662f30-6b04-4f39-a24c-7b8f46578e84" />
+<img width="1061" height="457" alt="image" src="https://github.com/user-attachments/assets/890e0ad9-d454-4fd4-87ce-afee7f6cf0f9" />
+
+<img width="1097" height="362" alt="image" src="https://github.com/user-attachments/assets/b0254de2-b8cc-4338-b27f-4879d13eaa22" />
+<img width="987" height="345" alt="image" src="https://github.com/user-attachments/assets/f6cc0a5f-4cbd-4381-854e-135f67817db7" />
+<img width="1096" height="545" alt="image" src="https://github.com/user-attachments/assets/446a621b-c36a-4f06-8bc0-fdd798d1bc8f" />
 
 Cloned the `vsdstdcelldesign` repo (home to the reference `sky130_inv.mag` layout) into the OpenLane working directory, dropped a copy of the `sky130A.tech` technology file from the PDK's `libs.tech/magic` folder into that repo so Magic could find it locally, and launched Magic with:
 
@@ -167,17 +169,17 @@ This brought up the reference Sky130 inverter layout — VPWR/VGND rails, the **
 
 ### Lab 3 — Telling the Transistors Apart
 
-<img width="1920" height="983" alt="nmos" src="https://github.com/user-attachments/assets/b2d1f6ce-cf62-4498-9578-d6fdd7928c6d" />
-<img width="1920" height="983" alt="pmos" src="https://github.com/user-attachments/assets/1da18003-1631-48df-83e6-467e6f751bcf" />
+<img width="1092" height="542" alt="image" src="https://github.com/user-attachments/assets/bc2518a3-6422-437c-a043-3716fca449e3" />
 
 Clicked into each transistor region and ran `what` in Magic's `tkcon` console to check which mask layer sat under the cursor — confirming the left-hand device as `nmos` and the right-hand device as `pmos`.
 
 ### Lab 4 — Pulling a SPICE Netlist Out of the Layout
 
-<img width="1920" height="983" alt="extraxct all cmd in tcon" src="https://github.com/user-attachments/assets/a13e8bb1-95c8-4c88-b90f-752aae26b395" />
-<img width="1920" height="983" alt="exttospicecmd" src="https://github.com/user-attachments/assets/9b0e9537-3224-4d31-afc3-7088e776dfc9" />
-<img width="1920" height="983" alt="created successfully" src="https://github.com/user-attachments/assets/56897573-d67f-413a-b404-fc2f65a53d76" />
-<img width="1920" height="983" alt="sky130_inv spice file" src="https://github.com/user-attachments/assets/e51a20f6-d6d2-4c9b-9573-727daf11e123" />
+<img width="1026" height="532" alt="image" src="https://github.com/user-attachments/assets/5faa61eb-2ecb-424f-8f55-762560797d76" />
+<img width="882" height="442" alt="image" src="https://github.com/user-attachments/assets/a799a627-41f4-4072-bad9-c6ca7cd00a30" />
+<img width="622" height="315" alt="image" src="https://github.com/user-attachments/assets/33e165a0-25df-4457-92dd-0c84f6f63091" />
+
+
 
 With the reference inverter still loaded, ran:
 
@@ -191,16 +193,17 @@ This generated `sky130_inv.ext` and then `sky130_inv.spice`. Opening that SPICE 
 
 ### Lab 5 — Tracking Down the Sky130 Device Models
 
-<img width="1920" height="983" alt="lib files" src="https://github.com/user-attachments/assets/a8557a22-1863-4bec-8dee-74c971469eff" />
-<img width="1920" height="983" alt="nshort_model file" src="https://github.com/user-attachments/assets/c51becb8-baca-4dc8-b443-e322123f5cda" />
-<img width="1920" height="983" alt="pshort_model file" src="https://github.com/user-attachments/assets/005f68d0-989e-4661-a4f9-6c5d46bbd45f" />
+<img width="762" height="517" alt="image" src="https://github.com/user-attachments/assets/e9617f2a-d602-4185-aecb-e59964568934" />
+<img width="841" height="507" alt="image" src="https://github.com/user-attachments/assets/b5963684-043a-45a9-822d-d92f16847e7c" />
 
 Poked around the `libs` folder inside `vsdstdcelldesign`, which holds `pshort.lib` and `nshort.lib` — BSIM4 models for the short-channel PMOS and NMOS devices used in the standard-cell library — alongside the fast/typical/slow corner libraries for the full `sky130_fd_sc_hd` cell set. Opening these files confirmed the model names the netlist actually needed: **`pshort_model.0`** for PMOS and **`nshort_model.0`** for NMOS.
 
 ### Lab 6 — Patching the Netlist and Getting a First Simulation Running
 
-<img width="1920" height="983" alt="ngspice run cmd" src="https://github.com/user-attachments/assets/6c881ec6-429d-4d53-b621-a372972a3194" />
-<img width="1920" height="983" alt="modified spice deck file" src="https://github.com/user-attachments/assets/71186fc0-2da7-4fc6-8b96-f5d5acefde21" />
+<img width="651" height="360" alt="image" src="https://github.com/user-attachments/assets/720486ab-6743-4c20-8d17-a9c34f629406" />
+
+<img width="675" height="405" alt="image" src="https://github.com/user-attachments/assets/447f0e31-0fd7-47e8-8b7f-d80ef62bdb70" />
+
 
 Running the raw extracted netlist in ngspice as-is failed immediately with:
 
@@ -212,11 +215,13 @@ since the deck wasn't actually pointing at the model libraries. Fixing this mean
 
 ### Lab 7 — Pulling Delay and Transition-Time Numbers from the Transient Sim
 
-<img width="1920" height="983" alt="transcient analysis plot of cmps inverter (modified code)" src="https://github.com/user-attachments/assets/587558a9-e4dc-4152-a208-e33f39c9a55b" />
-<img width="1917" height="987" alt="rise time transistion" src="https://github.com/user-attachments/assets/37a15742-305a-4bd8-89e2-1a381692c4b1" />
-<img width="1917" height="981" alt="fall time transistion" src="https://github.com/user-attachments/assets/97e1ec5d-88f7-47c5-82e9-6ed0a2652d99" />
-<img width="1912" height="982" alt="cell rise delay" src="https://github.com/user-attachments/assets/12064c53-e62a-4c83-96f4-507ee86bde61" />
-<img width="1917" height="977" alt="cell fall delay" src="https://github.com/user-attachments/assets/6c18e544-6a78-42d6-820b-047769db1b27" />
+
+<img width="1080" height="532" alt="image" src="https://github.com/user-attachments/assets/917b7f06-78fd-485e-b8bb-172af5f299cd" />
+<img width="497" height="492" alt="image" src="https://github.com/user-attachments/assets/b2b87dd2-45e4-4c31-89fb-e9419b8b4a02" />
+<img width="492" height="516" alt="image" src="https://github.com/user-attachments/assets/402a706c-3b3e-4a90-8546-deb520273d50" />
+<img width="527" height="502" alt="image" src="https://github.com/user-attachments/assets/3c24b75c-c173-4053-8941-913891c0e92c" />
+
+<img width="517" height="516" alt="image" src="https://github.com/user-attachments/assets/f57e9382-bc05-4345-b062-8b1a2823fd24" />
 
 Plotting `y` (output) against `time a` (input) in ngspice's transient viewer produced several clean inverter switching events. Using the plot's cursor tool to measure between the relevant threshold crossings gave:
 
@@ -231,25 +236,25 @@ These map directly onto the dynamic-behavior definitions from the theory section
 
 ### Lab 8 — Poking at the DRC Rule Deck (Metal3 and Poly)
 
-<img width="1920" height="983" alt="met3" src="https://github.com/user-attachments/assets/f83f8c06-707d-4c40-b04d-28f64313001d" />
+<img width="1082" height="536" alt="image" src="https://github.com/user-attachments/assets/45275454-70a0-4f04-8b4a-b3d2c48e3a85" />
+
 
 Loaded up a reference DRC test deck holding a set of labeled Metal3 (m3) structures — m3.1 through m3.7 — split between correctly designed cells (m3.4) and a deliberately broken one (m3.7), plus two larger multi-via structures (m3.3c, m3.3d).
 
-<img width="1920" height="983" alt="drc why met2" src="https://github.com/user-attachments/assets/22ed60bf-4c47-4821-bb7d-90b772be695d" />
-<img width="1920" height="983" alt="drc why met 3 2" src="https://github.com/user-attachments/assets/19cee2bb-670f-4174-9ddd-6691324c6712" />
+<img width="1087" height="540" alt="image" src="https://github.com/user-attachments/assets/9314762d-639e-444a-93dd-c1dca97265aa" />
 
 Running `drc why` on the flagged regions returned the exact rule each one broke:
 
 - `Metal3 spacing < 0.3um (met3.2)`
 - `Metal3 minimum area < 0.24um^2 (met3.6)`
 
-<img width="1920" height="983" alt="cif see VIA2 cmd full view" src="https://github.com/user-attachments/assets/3094af63-0b52-43de-b6fc-360b89278dde" />
-<img width="1920" height="983" alt="cif see VIA2 cmd" src="https://github.com/user-attachments/assets/2a803c93-5686-4559-b2bb-1710e3dc4f14" />
-<img width="1920" height="983" alt="measurement" src="https://github.com/user-attachments/assets/2afd3f72-2eeb-40d3-9e84-3d3d3682c10a" />
+<img width="1052" height="546" alt="image" src="https://github.com/user-attachments/assets/3eae7e9e-7e0a-4406-bdd8-dfa29c757516" />
+<img width="1097" height="532" alt="image" src="https://github.com/user-attachments/assets/ad24e6d9-7591-4155-95db-f0a30945fe6a" />
 
 Zoomed into the m3.3c structure — a grid of via/contact cuts inside a met3 region flagged with DRC=22 total violations — and used `paint m3contact` followed by `cif see VIA2` to isolate the VIA2 mask layer on its own. Querying a selected via/contact region with `box` reported dimensions of 0.190 × 0.200 µm (0.038 µm² area).
 
-<img width="1920" height="983" alt="rule violation" src="https://github.com/user-attachments/assets/d80dfd77-e13a-40bb-be33-398927d40db2" />
+<img width="1101" height="547" alt="image" src="https://github.com/user-attachments/assets/310b3185-55f5-4db9-87d6-0d9d6815bb8f" />
+
 
 Switched the active editing layer to **poly** (DRC count dropped to DRC=10 on this layer) and queried a selected poly shape, which came back at 0.335 × 0.210 µm (0.070 µm² area) — labeled "poly.9" in the reference deck.
 
