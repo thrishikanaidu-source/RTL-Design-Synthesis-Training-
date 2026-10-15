@@ -13,5 +13,6 @@ This video presents my learning journey, practical work, and understanding of th
 
 ## Video
 
-The training demonstration video is included in this repository.
+## 🎥 RTL Design and Physical Design Workshop — Video Presentation
+https://drive.google.com/file/d/1bkSH2bIhW6HSGDpYekTLupYKkhjWuSJd/view?usp=sharing
 
